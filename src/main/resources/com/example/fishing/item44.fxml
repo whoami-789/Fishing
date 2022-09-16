@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -47,7 +47,7 @@
                     </Label>
                 </Pane>
                 <Pane prefHeight="25.0" prefWidth="111.0">
-                    <ComboBox fx:id="maker" layoutX="-75.0" prefWidth="150.0" promptText="Исполнитель" />
+                    <ComboBox fx:id="maker" layoutX="-71.0" prefWidth="150.0" promptText="Исполнитель" />
                 </Pane>
             </HBox>
         </Pane>
@@ -83,7 +83,7 @@
                                     </ImageView>
                                 </Pane>
                                 <Pane prefHeight="45.0" prefWidth="50.0">
-                                    <ImageView fitHeight="35.0" fitWidth="40.0" layoutX="4.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="35.0" fitWidth="40.0" layoutX="2.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                                         <Image url="@../../../icons/copy.png" />
                                     </ImageView>
                                 </Pane>
@@ -107,37 +107,13 @@
         </Pane>
         <Pane fx:id="pane443" prefHeight="25.0" prefWidth="1095.0" style="-fx-background-color: #f8d8b0;" GridPane.rowIndex="2">
             <HBox prefHeight="25.0" prefWidth="1095.0">
-                <Label fx:id="docName1" alignment="CENTER" prefHeight="28.0" prefWidth="160.0" textFill="#7c4a09" />
-                <Label fx:id="docName2" alignment="CENTER" prefHeight="28.0" prefWidth="160.0" textFill="#7c4a09">
-                    <graphic>
-                        <Hyperlink fx:id="href2" />
-                    </graphic>
-                </Label>
-                <Label fx:id="docName3" alignment="CENTER" prefHeight="28.0" prefWidth="160.0" textFill="#7c4a09">
-                    <graphic>
-                        <Hyperlink fx:id="href3" />
-                    </graphic>
-                </Label>
-                <Label fx:id="docName4" alignment="CENTER" prefHeight="28.0" prefWidth="160.0" textFill="#7c4a09">
-                    <graphic>
-                        <Hyperlink fx:id="href4" />
-                    </graphic>
-                </Label>
-                <Label fx:id="docName5" alignment="CENTER" prefHeight="28.0" prefWidth="160.0" textFill="#7c4a09">
-                    <graphic>
-                        <Hyperlink fx:id="href5" />
-                    </graphic>
-                </Label>
-                <Label fx:id="docName6" alignment="CENTER" prefHeight="28.0" prefWidth="160.0" textFill="#7c4a09">
-                    <graphic>
-                        <Hyperlink fx:id="href6" />
-                    </graphic>
-                </Label>
-                <Label fx:id="docName7" alignment="CENTER" prefHeight="28.0" prefWidth="160.0" textFill="#7c4a09">
-                    <graphic>
-                        <Hyperlink fx:id="href7" />
-                    </graphic>
-                </Label>
+            <Button fx:id="doc1" mnemonicParsing="false" prefHeight="28.0" prefWidth="160.0" style="-fx-background-color: #f8d8b0;" />
+            <Button fx:id="doc2" mnemonicParsing="false" prefHeight="28.0" prefWidth="160.0" style="-fx-background-color: #f8d8b0;" />
+            <Button fx:id="doc3" mnemonicParsing="false" prefHeight="28.0" prefWidth="160.0" style="-fx-background-color: #f8d8b0;" />
+            <Button fx:id="doc4" mnemonicParsing="false" prefHeight="28.0" prefWidth="160.0" style="-fx-background-color: #f8d8b0;" />
+            <Button fx:id="doc5" mnemonicParsing="false" prefHeight="28.0" prefWidth="160.0" style="-fx-background-color: #f8d8b0;" />
+            <Button fx:id="doc6" mnemonicParsing="false" prefHeight="28.0" prefWidth="160.0" style="-fx-background-color: #f8d8b0;" />
+            <Button fx:id="doc7" mnemonicParsing="false" prefHeight="28.0" prefWidth="160.0" style="-fx-background-color: #f8d8b0;" />
             </HBox>
         </Pane>
     </children>

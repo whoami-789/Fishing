@@ -1,5 +1,6 @@
 package com.example.fishing;
 
+import com.example.fishing.models.Citems;
 import com.example.fishing.models.FZ44;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +9,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.awt.Desktop;
 
 public class FZ44Controller extends ListCell<FZ44> {
 
@@ -15,55 +19,34 @@ public class FZ44Controller extends ListCell<FZ44> {
     private CheckBox check;
 
     @FXML
-    private Label docName1;
+    private Button doc1;
 
     @FXML
-    private Label docName2;
+    private Button doc2;
 
     @FXML
-    private Label docName3;
+    private Button doc3;
 
     @FXML
-    private Label docName4;
+    private Button doc4;
 
     @FXML
-    private Label docName5;
+    private Button doc5;
 
     @FXML
-    private Label docName6;
+    private Button doc6;
 
     @FXML
-    private Label docName7;
+    private Button doc7;
 
     @FXML
     private GridPane grid;
 
     @FXML
-    private Hyperlink href1;
-
-    @FXML
-    private Hyperlink href2;
-
-    @FXML
-    private Hyperlink href3;
-
-    @FXML
-    private Hyperlink href4;
-
-    @FXML
-    private Hyperlink href5;
-
-    @FXML
-    private Hyperlink href6;
-
-    @FXML
-    private Hyperlink href7;
-
-    @FXML
     private Label info;
 
     @FXML
-    private ComboBox<?> maker;
+    private ComboBox<Citems> maker;
 
     @FXML
     private Label num;
@@ -85,6 +68,9 @@ public class FZ44Controller extends ListCell<FZ44> {
 
     @FXML
     private Label type;
+
+    @FXML
+    private Label type1;
     private FXMLLoader mloader;
 
     @Override
@@ -115,99 +101,99 @@ public class FZ44Controller extends ListCell<FZ44> {
             orgName.setText(fz.getClientname());
             if (fz.getDocUrl().size() == 1){
                 //Названия документов
-                docName1.setText(fz.getDocUrl().get(0).getDocName());
-
-                //Ссылки документов
-                href1 = new Hyperlink(fz.getDocUrl().get(0).getUrl());
-               // href1.setText(fz.getDocUrl().get(0).getUrl());
+                doc1.setText(fz.getDocUrl().get(0).getDocName());
             } else if (fz.getDocUrl().size() == 2) {
                 //Названия документов
-                docName1.setText(fz.getDocUrl().get(0).getDocName());
-                docName2.setText(fz.getDocUrl().get(1).getDocName());
-
-                //Ссылки документов
-              /*  href1.setText(fz.getDocUrl().get(0).getUrl());
-                href2.setText(fz.getDocUrl().get(1).getUrl());*/
+                doc1.setText(fz.getDocUrl().get(0).getDocName());
+                doc2.setText(fz.getDocUrl().get(1).getDocName());
             }else if (fz.getDocUrl().size() ==3) {
                 //Названия документов
-                docName1.setText(fz.getDocUrl().get(0).getDocName());
-                docName2.setText(fz.getDocUrl().get(1).getDocName());
-                docName3.setText(fz.getDocUrl().get(2).getDocName());
-
-                //Ссылки документов
-               /* href1.setText(fz.getDocUrl().get(0).getUrl());
-                href2.setText(fz.getDocUrl().get(1).getUrl());
-                href3.setText(fz.getDocUrl().get(2).getUrl());*/
+                doc1.setText(fz.getDocUrl().get(0).getDocName());
+                doc2.setText(fz.getDocUrl().get(1).getDocName());
+                doc3.setText(fz.getDocUrl().get(2).getDocName());
             }else if (fz.getDocUrl().size() == 4) {
                 //Названия документов
-                docName1.setText(fz.getDocUrl().get(0).getDocName());
-                docName2.setText(fz.getDocUrl().get(1).getDocName());
-                docName3.setText(fz.getDocUrl().get(2).getDocName());
-                docName4.setText(fz.getDocUrl().get(3).getDocName());
-
-                //Ссылки документов
-               /* href1.setText(fz.getDocUrl().get(0).getUrl());
-                href2.setText(fz.getDocUrl().get(1).getUrl());
-                href3.setText(fz.getDocUrl().get(2).getUrl());
-                href4.setText(fz.getDocUrl().get(3).getUrl());*/
+                doc1.setText(fz.getDocUrl().get(0).getDocName());
+                doc2.setText(fz.getDocUrl().get(1).getDocName());
+                doc3.setText(fz.getDocUrl().get(2).getDocName());
+                doc4.setText(fz.getDocUrl().get(3).getDocName());
             }else if (fz.getDocUrl().size() == 5) {
                 //Названия документов
-                docName1.setText(fz.getDocUrl().get(0).getDocName());
-                docName2.setText(fz.getDocUrl().get(1).getDocName());
-                docName3.setText(fz.getDocUrl().get(2).getDocName());
-                docName4.setText(fz.getDocUrl().get(3).getDocName());
-                docName5.setText(fz.getDocUrl().get(4).getDocName());
-
-                //Ссылки документов
-               /* href1.setText(fz.getDocUrl().get(0).getUrl());
-                href2.setText(fz.getDocUrl().get(1).getUrl());
-                href3.setText(fz.getDocUrl().get(2).getUrl());
-                href4.setText(fz.getDocUrl().get(3).getUrl());
-                href5.setText(fz.getDocUrl().get(4).getUrl());*/
+                doc1.setText(fz.getDocUrl().get(0).getDocName());
+                doc2.setText(fz.getDocUrl().get(1).getDocName());
+                doc3.setText(fz.getDocUrl().get(2).getDocName());
+                doc4.setText(fz.getDocUrl().get(3).getDocName());
+                doc5.setText(fz.getDocUrl().get(4).getDocName());
             }else if (fz.getDocUrl().size() == 6) {
                 //Названия документов
-                docName1.setText(fz.getDocUrl().get(0).getDocName());
-                docName2.setText(fz.getDocUrl().get(1).getDocName());
-                docName3.setText(fz.getDocUrl().get(2).getDocName());
-                docName4.setText(fz.getDocUrl().get(3).getDocName());
-                docName5.setText(fz.getDocUrl().get(4).getDocName());
-                docName6.setText(fz.getDocUrl().get(5).getDocName());
-
-                //Ссылки документов
-               /* href1.setText(fz.getDocUrl().get(0).getUrl());
-                href2.setText(fz.getDocUrl().get(1).getUrl());
-                href3.setText(fz.getDocUrl().get(2).getUrl());
-                href4.setText(fz.getDocUrl().get(3).getUrl());
-                href5.setText(fz.getDocUrl().get(4).getUrl());
-                href6.setText(fz.getDocUrl().get(5).getUrl());*/
+                doc1.setText(fz.getDocUrl().get(0).getDocName());
+                doc2.setText(fz.getDocUrl().get(1).getDocName());
+                doc3.setText(fz.getDocUrl().get(2).getDocName());
+                doc4.setText(fz.getDocUrl().get(3).getDocName());
+                doc5.setText(fz.getDocUrl().get(4).getDocName());
+                doc6.setText(fz.getDocUrl().get(5).getDocName());
             }else if (fz.getDocUrl().size() == 7) {
                 //Названия документов
-                docName1.setText(fz.getDocUrl().get(0).getDocName());
-                docName2.setText(fz.getDocUrl().get(1).getDocName());
-                docName3.setText(fz.getDocUrl().get(2).getDocName());
-                docName4.setText(fz.getDocUrl().get(3).getDocName());
-                docName5.setText(fz.getDocUrl().get(4).getDocName());
-                docName6.setText(fz.getDocUrl().get(5).getDocName());
-                docName7.setText(fz.getDocUrl().get(6).getDocName());
-
-                //Ссылки документов
-               /* href1.setText(fz.getDocUrl().get(0).getUrl());
-                href2.setText(fz.getDocUrl().get(1).getUrl());
-                href3.setText(fz.getDocUrl().get(2).getUrl());
-                href4.setText(fz.getDocUrl().get(3).getUrl());
-                href5.setText(fz.getDocUrl().get(4).getUrl());
-                href6.setText(fz.getDocUrl().get(5).getUrl());
-                href7.setText(fz.getDocUrl().get(6).getUrl());*/
+                doc1.setText(fz.getDocUrl().get(0).getDocName());
+                doc2.setText(fz.getDocUrl().get(1).getDocName());
+                doc3.setText(fz.getDocUrl().get(2).getDocName());
+                doc4.setText(fz.getDocUrl().get(3).getDocName());
+                doc5.setText(fz.getDocUrl().get(4).getDocName());
+                doc6.setText(fz.getDocUrl().get(5).getDocName());
+                doc7.setText(fz.getDocUrl().get(6).getDocName());
             }
-
-
+            doc1.setOnAction(actionEvent -> {
+                try {
+                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(0).getUrl()).toURI());
+                } catch (IOException | URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            doc2.setOnAction(actionEvent -> {
+                try {
+                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(1).getUrl()).toURI());
+                } catch (IOException | URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            doc3.setOnAction(actionEvent -> {
+                try {
+                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(2).getUrl()).toURI());
+                } catch (IOException | URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            doc4.setOnAction(actionEvent -> {
+                try {
+                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(3).getUrl()).toURI());
+                } catch (IOException | URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            doc5.setOnAction(actionEvent -> {
+                try {
+                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(4).getUrl()).toURI());
+                } catch (IOException | URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            doc6.setOnAction(actionEvent -> {
+                try {
+                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(5).getUrl()).toURI());
+                } catch (IOException | URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            doc7.setOnAction(actionEvent -> {
+                try {
+                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(6).getUrl()).toURI());
+                } catch (IOException | URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
             setText(null);
             setGraphic(grid);
         }
-    }
-    @FXML
-    public void click(){
-        href1 = new Hyperlink();
     }
 }

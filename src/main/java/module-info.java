@@ -4,6 +4,7 @@ module com.example.fishing {
 
     requires java.xml;
     requires rome;
+    requires java.desktop;
 
     opens com.example.fishing to javafx.fxml;
     exports com.example.fishing;
