@@ -1,4 +1,5 @@
 package com.example.fishing.models;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FZ44 {
@@ -7,7 +8,7 @@ public class FZ44 {
     public String tendertype;
     public String clientname;
     public String article;
-    public List<DocUrl> docUrl;
+    public ArrayList<DocUrl> docUrl;
     public String maxPrice;
     public String inn;
     public String kpp;
@@ -24,18 +25,18 @@ public class FZ44 {
     public String address;
     public String person;
 
-    public FZ44(String tenderid, String tendertype, String clientname, String article, String maxPrice) {
+    public FZ44(String tenderid, String tendertype, String clientname, String article, String maxPrice, ArrayList<DocUrl> docUrl) {
         this.tenderid = tenderid;
         this.tendertype = tendertype;
         this.clientname = clientname;
         this.article = article;
         this.maxPrice = maxPrice;
+        this.docUrl = docUrl;
     }
 
     public FZ44() {
 
     }
-
     public String getUrl() {
         return url;
     }
@@ -127,7 +128,7 @@ public class FZ44 {
         this.article = article;
     }
 
-    public void setDocUrl(List<DocUrl> docUrl) {
+    public void setDocUrl(ArrayList<DocUrl> docUrl) {
         this.docUrl = docUrl;
     }
 

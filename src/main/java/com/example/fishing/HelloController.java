@@ -64,7 +64,7 @@ public class HelloController {
             System.out.println((long) feed[0].getEntries().size());
             String url;
             for (Object o : res) {
-                List<DocUrl> docUrlList = new ArrayList<>();
+                ArrayList<DocUrl> docUrlList = new ArrayList<>();
                 var a = ((SyndEntryImpl) o).getDescription().getValue();
 
                 String[] parts = a.split("<strong>");
@@ -76,7 +76,7 @@ public class HelloController {
                 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                 Document doc = dbf.newDocumentBuilder().parse(url);
 
-                org.w3c.dom.Node root = doc.getDocumentElement();
+                Node root = doc.getDocumentElement();
 
                 NodeList rootNode = root.getChildNodes();
                 NodeList commonInfo;
@@ -225,10 +225,10 @@ public class HelloController {
                 }
                 System.out.println("======>");
                 System.out.println(fz44);
-                System.out.println(fz44.getTenderid());
+                System.out.println(fz44.getDocUrl().size());
 
                 fz44ObsList.addAll(new FZ44(fz44.getTenderid(), fz44.getTendertype(),
-                        fz44.getClientname(), fz44.getArticle(),fz44.getMaxPrice()));
+                        fz44.getClientname(), fz44.getArticle(),fz44.getMaxPrice(), (ArrayList<DocUrl>) fz44.getDocUrl()));
                 itemHolder.setItems(fz44ObsList);
                 itemHolder.setCellFactory(fzListView -> new FZ44Controller());
             }

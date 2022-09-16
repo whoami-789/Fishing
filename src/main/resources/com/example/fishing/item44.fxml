@@ -107,11 +107,7 @@
         </Pane>
         <Pane fx:id="pane443" prefHeight="25.0" prefWidth="1095.0" style="-fx-background-color: #f8d8b0;" GridPane.rowIndex="2">
             <HBox prefHeight="25.0" prefWidth="1095.0">
-                <Label fx:id="docName1" alignment="CENTER" prefHeight="28.0" prefWidth="160.0" textFill="#7c4a09">
-                    <graphic>
-                        <Hyperlink fx:id="href1" />
-                    </graphic>
-                </Label>
+                <Label fx:id="docName1" alignment="CENTER" prefHeight="28.0" prefWidth="160.0" textFill="#7c4a09" />
                 <Label fx:id="docName2" alignment="CENTER" prefHeight="28.0" prefWidth="160.0" textFill="#7c4a09">
                     <graphic>
                         <Hyperlink fx:id="href2" />
