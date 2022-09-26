@@ -18,10 +18,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -54,12 +51,15 @@ public class HelloController {
     }
 
     @FXML
-    protected void take() {
+    protected void take() throws Exception {
+        final SyndFeed[] feed = new SyndFeed[1];
+        feed[0] = getSyndFeedForUrl("https://zakupki.gov.ru/epz/order/extendedsearch/rss.html?morphology=on&sortBy=UPDATE_DATE&pageNumber=1&sortDirection=false&recordsPerPage=_10&showLotsInfoHidden=false&fz44=on&af=on&ca=on&pc=on&pa=on&priceContractAdvantages44IdNameHidden=%7B%7D&priceContractAdvantages94IdNameHidden=%7B%7D&currencyIdGeneral=-1&publishDateFrom=" + getDate() + "&publishDateTo=" + getDate() + "&delKladrIds=5277338&delKladrIdsCodes=11000000000&selectedSubjectsIdNameHidden=%7B%7D&okdpGroupIdsIdNameHidden=%7B%7D&koksIdsIdNameHidden=%7B%7D&OrderPlacementSmallBusinessSubject=on&OrderPlacementRnpData=on&OrderPlacementExecutionRequirement=on&orderPlacement94_0=0&orderPlacement94_1=0&orderPlacement94_2=0&contractPriceCurrencyId=-1&budgetLevelIdNameHidden=%7B%7D&nonBudgetTypesIdNameHidden=%7B%7D");
+        List res = feed[0].getEntries();
         take.setOnAction(actionEvent -> {
-            final SyndFeed[] feed = new SyndFeed[1];
+
             ObservableList<FZ44> fz44ObsList = FXCollections.observableArrayList();
             try {
-                Connection conn = DriverManager.getConnection(db, username, password);
+                // Connection conn = DriverManager.getConnection(db, username, password);
                 System.out.println("ok");
 
                 String amount = "";
@@ -71,8 +71,7 @@ public class HelloController {
                 String maxPrice = "";
                 String docurl = "";
                 String docname = "";
-                feed[0] = getSyndFeedForUrl("https://zakupki.gov.ru/epz/order/extendedsearch/rss.html?morphology=on&sortBy=UPDATE_DATE&pageNumber=1&sortDirection=false&recordsPerPage=_10&showLotsInfoHidden=false&fz44=on&af=on&ca=on&pc=on&pa=on&priceContractAdvantages44IdNameHidden=%7B%7D&priceContractAdvantages94IdNameHidden=%7B%7D&currencyIdGeneral=-1&publishDateFrom=" + getDate() + "&publishDateTo=" + getDate() + "&delKladrIds=5277338&delKladrIdsCodes=11000000000&selectedSubjectsIdNameHidden=%7B%7D&okdpGroupIdsIdNameHidden=%7B%7D&koksIdsIdNameHidden=%7B%7D&OrderPlacementSmallBusinessSubject=on&OrderPlacementRnpData=on&OrderPlacementExecutionRequirement=on&orderPlacement94_0=0&orderPlacement94_1=0&orderPlacement94_2=0&contractPriceCurrencyId=-1&budgetLevelIdNameHidden=%7B%7D&nonBudgetTypesIdNameHidden=%7B%7D");
-                List res = feed[0].getEntries();
+
                 System.out.println((long) feed[0].getEntries().size());
                 String url;
                 for (Object o : res) {
@@ -243,25 +242,47 @@ public class HelloController {
                     itemHolder.setItems(fz44ObsList);
                     itemHolder.setCellFactory(fzListView -> new FZ44Controller());
 
-                    Statement st = conn.createStatement();
-                    st.execute("insert into tenders (tenderid, purchaseObjectInfo, ename, summcontract) values (" + fz44.getTenderid() + ", " + fz44.getArticle() + ", " + fz44.getTendertype() + ", " + fz44.getMaxPrice() + ")");
+                    save.setOnAction(actionEvent1 -> {
+
+                    });
+
+                    try (Connection conn = DriverManager.getConnection(db, username, password)){
+
+                        String sql = "insert into tenders (tenderid, article, tendertype, summcontract) values (?,?,?,?)";
+                        PreparedStatement preparedStatement = conn.prepareStatement(sql);
+                        preparedStatement.setString(1, fz44.getTenderid());
+                        preparedStatement.setString(2, fz44.getArticle());
+                        preparedStatement.setString(3, fz44.getTendertype());
+                        preparedStatement.setFloat(4, Float.parseFloat(fz44.getMaxPrice()));
+
+                        int rows = preparedStatement.executeUpdate();
+
+                        System.out.printf("%d rows added", rows);
+                    }
                 }
-                conn.close();
+                //conn.close();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
 
         save.setOnAction(actionEvent -> {
-            try {
-                Connection conn = DriverManager.getConnection(db, username, password);
-                System.out.println("ok");
+            for (Object o : res){
+                try (Connection conn = DriverManager.getConnection(db, username, password)){
 
-                Statement st = conn.createStatement();
-                //st.execute();
-                conn.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+                   /* String sql = "insert into tenders (tenderid, article, tendertype, summcontract) values (?,?,?,?)";
+                    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+                    preparedStatement.setString(1, fz44.getTenderid());
+                    preparedStatement.setString(2, fz44.getArticle());
+                    preparedStatement.setString(3, fz44.getTendertype());
+                    preparedStatement.setFloat(4, Float.parseFloat(fz44.getMaxPrice()));
+
+                    int rows = preparedStatement.executeUpdate();
+
+                    System.out.printf("%d rows added", rows);*/
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
