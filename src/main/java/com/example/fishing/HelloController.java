@@ -242,10 +242,6 @@ public class HelloController {
                     itemHolder.setItems(fz44ObsList);
                     itemHolder.setCellFactory(fzListView -> new FZ44Controller());
 
-                    save.setOnAction(actionEvent1 -> {
-
-                    });
-
                     try (Connection conn = DriverManager.getConnection(db, username, password)){
 
                         String sql = "insert into tenders (tenderid, article, tendertype, summcontract) values (?,?,?,?)";
@@ -260,7 +256,6 @@ public class HelloController {
                         System.out.printf("%d rows added", rows);
                     }
                 }
-                //conn.close();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
