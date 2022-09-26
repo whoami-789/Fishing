@@ -4,14 +4,16 @@ import com.example.fishing.models.Citems;
 import com.example.fishing.models.FZ44;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.awt.Desktop;
 
 public class FZ44Controller extends ListCell<FZ44> {
 
@@ -77,19 +79,19 @@ public class FZ44Controller extends ListCell<FZ44> {
     protected void updateItem(FZ44 fz, boolean empty) {
         super.updateItem(fz, empty);
 
-        if (empty || fz == null){
+        if (empty || fz == null) {
 
             setText(null);
             setGraphic(null);
 
-        }else {
-            if (mloader == null){
+        } else {
+            if (mloader == null) {
                 mloader = new FXMLLoader(getClass().getResource("item44.fxml"));
                 mloader.setController(this);
 
                 try {
                     mloader.load();
-                }catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -99,32 +101,32 @@ public class FZ44Controller extends ListCell<FZ44> {
             type.setText(fz.getTendertype());
             info.setText(fz.getArticle());
             orgName.setText(fz.getClientname());
-            if (fz.getDocUrl().size() == 1){
+            if (fz.getDocUrl().size() == 1) {
                 //Названия документов
                 doc1.setText(fz.getDocUrl().get(0).getDocName());
             } else if (fz.getDocUrl().size() == 2) {
                 //Названия документов
                 doc1.setText(fz.getDocUrl().get(0).getDocName());
                 doc2.setText(fz.getDocUrl().get(1).getDocName());
-            }else if (fz.getDocUrl().size() ==3) {
+            } else if (fz.getDocUrl().size() == 3) {
                 //Названия документов
                 doc1.setText(fz.getDocUrl().get(0).getDocName());
                 doc2.setText(fz.getDocUrl().get(1).getDocName());
                 doc3.setText(fz.getDocUrl().get(2).getDocName());
-            }else if (fz.getDocUrl().size() == 4) {
+            } else if (fz.getDocUrl().size() == 4) {
                 //Названия документов
                 doc1.setText(fz.getDocUrl().get(0).getDocName());
                 doc2.setText(fz.getDocUrl().get(1).getDocName());
                 doc3.setText(fz.getDocUrl().get(2).getDocName());
                 doc4.setText(fz.getDocUrl().get(3).getDocName());
-            }else if (fz.getDocUrl().size() == 5) {
+            } else if (fz.getDocUrl().size() == 5) {
                 //Названия документов
                 doc1.setText(fz.getDocUrl().get(0).getDocName());
                 doc2.setText(fz.getDocUrl().get(1).getDocName());
                 doc3.setText(fz.getDocUrl().get(2).getDocName());
                 doc4.setText(fz.getDocUrl().get(3).getDocName());
                 doc5.setText(fz.getDocUrl().get(4).getDocName());
-            }else if (fz.getDocUrl().size() == 6) {
+            } else if (fz.getDocUrl().size() == 6) {
                 //Названия документов
                 doc1.setText(fz.getDocUrl().get(0).getDocName());
                 doc2.setText(fz.getDocUrl().get(1).getDocName());
@@ -132,7 +134,7 @@ public class FZ44Controller extends ListCell<FZ44> {
                 doc4.setText(fz.getDocUrl().get(3).getDocName());
                 doc5.setText(fz.getDocUrl().get(4).getDocName());
                 doc6.setText(fz.getDocUrl().get(5).getDocName());
-            }else if (fz.getDocUrl().size() == 7) {
+            } else if (fz.getDocUrl().size() == 7) {
                 //Названия документов
                 doc1.setText(fz.getDocUrl().get(0).getDocName());
                 doc2.setText(fz.getDocUrl().get(1).getDocName());
