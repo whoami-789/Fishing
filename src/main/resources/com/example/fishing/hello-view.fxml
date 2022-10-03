@@ -25,7 +25,7 @@
                 </graphic>
             </Button>
             <DatePicker fx:id="shedule" layoutY="-1.0" promptText="Новые торги с" />
-            <Button fx:id="save" layoutX="331.0" layoutY="1.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="96.0" text="Сохранить">
+            <Button fx:id="save" layoutX="331.0" layoutY="1.0" mnemonicParsing="false" onAction="#take" prefHeight="25.0" prefWidth="96.0" text="Сохранить">
                 <graphic>
                     <ImageView fitHeight="15.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@../../../icons/protocols.png" />
