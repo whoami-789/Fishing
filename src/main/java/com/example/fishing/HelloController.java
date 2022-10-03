@@ -255,9 +255,16 @@ public class HelloController {
                 itemHolder.getItems();
                 System.out.println(itemHolder.getCellFactory());
             }*/
+            int i=0;
             for (Object o : res){
-                System.out.println(itemHolder.getItems());
+                System.out.println(itemHolder.getItems().get(i));
+                i++;
+
+/*                int c = b-2;
+                System.out.println(itemHolder.getItems().get(c));
+                */
             }
+
         });
 
     }
