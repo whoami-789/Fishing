@@ -18,6 +18,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -251,20 +255,37 @@ public class HelloController {
         });
 
         save.setOnAction(actionEvent -> {
-          /*  for (int i = feed[0].getEntries().size(); i == 0; i--) {
-                itemHolder.getItems();
-                System.out.println(itemHolder.getCellFactory());
-            }*/
             int i=0;
-            for (Object o : res){
-                System.out.println(itemHolder.getItems().get(i));
-                i++;
+            for (Object o : res) {
+                Connection conn = null;
+                try {
+                    conn = DriverManager.getConnection(db, username, password);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
 
-/*                int c = b-2;
-                System.out.println(itemHolder.getItems().get(c));
-                */
+                String sql = "insert into tenders (tenderid, article, tendertype, summcontract) values (?,?,?,?)";
+                PreparedStatement preparedStatement = null;
+                try {
+                    preparedStatement = conn.prepareStatement(sql);
+                    preparedStatement.setString(1, String.valueOf(itemHolder.getItems().get(i).tenderid));
+                    preparedStatement.setString(2, fz44.getArticle());
+                    preparedStatement.setString(3, fz44.getTendertype());
+                    preparedStatement.setFloat(4, Float.parseFloat(fz44.getMaxPrice()));
+                    int rows = preparedStatement.executeUpdate();
+                    System.out.printf("%d rows added\n", rows);
+                    System.out.println(itemHolder.getItems().get(i));
+                    i++;
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+
+
+
+
             }
-
         });
 
     }
