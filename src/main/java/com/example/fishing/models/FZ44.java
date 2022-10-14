@@ -4,18 +4,17 @@ import java.util.List;
 
 public class FZ44 {
     // FZ44Controller fz44 = new FZ44Controller();
-    public String tenderid;
-    public String tendertype;
-    public String clientname;
-    public String article;
-    public ArrayList<DocUrl> docUrl;
-    public String maxPrice;
+    public String tenderid; // +
+    public String tendertype; // +
+    public String clientname; // +
+    public String article; // +
+    public ArrayList<DocUrl> docUrl; // +
+    public String maxPrice; // +
     public String inn;
     public String kpp;
-    public String amount;
-    public String publishDate;
-    public String docInfo;
-    public String url;
+    public String amount; // +
+    public String publishDate;//+-
+    public String url; // +
 
     //добавить в парсер
     public String ikz;
@@ -84,10 +83,6 @@ public class FZ44 {
         return this.publishDate;
     }
 
-    public String getDocInfo() {
-        return this.docInfo;
-    }
-
     public String getIkz() {
         return this.ikz;
     }
@@ -152,10 +147,6 @@ public class FZ44 {
         this.publishDate = publishDate;
     }
 
-    public void setDocInfo(String docInfo) {
-        this.docInfo = docInfo;
-    }
-
     public void setIkz(String ikz) {
         this.ikz = ikz;
     }
@@ -193,7 +184,6 @@ public class FZ44 {
                 ", kpp='" + kpp + '\'' +
                 ", amount='" + amount + '\'' +
                 ", publishDate='" + publishDate + '\'' +
-                ", docInfo='" + docInfo + '\'' +
                 ", url='" + url + '\'' +
                 ", ikz='" + ikz + '\'' +
                 ", dateOfCreation='" + dateOfCreation + '\'' +

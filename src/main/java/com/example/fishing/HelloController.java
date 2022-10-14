@@ -2,6 +2,7 @@ package com.example.fishing;
 
 import com.example.fishing.models.DocUrl;
 import com.example.fishing.models.FZ44;
+import com.example.fishing.utils.FileUtil;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
@@ -15,6 +16,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -77,6 +79,10 @@ public class HelloController {
                 String maxPrice = "";
                 String docurl = "";
                 String docname = "";
+                String publishDate = "";
+                String inn = "";
+                String kpp = "";
+                String ikz = "";
 
                 System.out.println((long) feed[0].getEntries().size());
                 String url;
@@ -108,6 +114,11 @@ public class HelloController {
                     NodeList attachmentsInfo;
                     NodeList attachments;
                     NodeList docKindInfo;
+                    NodeList responsibleOrgInfo;
+                    NodeList purchaseResponsibleInfo;
+                    NodeList ikzz;
+                    NodeList ikz_node;
+                    NodeList contract_conditionsInfo;
 
 
                     for (int i = 0; i < rootNode.getLength(); i++) {
@@ -136,10 +147,34 @@ public class HelloController {
                                             case "purchaseObjectInfo" -> {
                                                 purchaseObjectInfo = commonInfo.item(j).getTextContent();
                                             }
+                                            case "plannedPublishDate" -> {
+                                                publishDate = commonInfo.item(j).getTextContent();//
+                                            }
                                         }
                                     }
                                 }
                             }
+                            case "purchaseResponsibleInfo" -> {
+                                purchaseResponsibleInfo = rootNode.item(i).getChildNodes();
+                                for (int j = 0; j < purchaseResponsibleInfo.getLength(); j++) {
+                                    if (purchaseResponsibleInfo.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                        if ("responsibleOrgInfo".equals(purchaseResponsibleInfo.item(j).getNodeName())) {
+                                            responsibleOrgInfo = purchaseResponsibleInfo.item(j).getChildNodes();
+                                            for (int k = 0; k < responsibleOrgInfo.getLength(); k++) {
+                                                if (responsibleOrgInfo.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                                                    switch (responsibleOrgInfo.item(k).getNodeName()) {
+                                                        case "INN" -> inn = responsibleOrgInfo.item(k).getTextContent();
+                                                        case "KPP" -> kpp = responsibleOrgInfo.item(k).getTextContent();
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                    }
+
+                                }
+                            }
+
                             case "notificationInfo" -> {
                                 notificationInfo = rootNode.item(i).getChildNodes();
                                 for (int j = 0; j < notificationInfo.getLength(); j++) {
@@ -170,6 +205,23 @@ public class HelloController {
                                                                                 if (applicationGuarantee.item(li).getNodeType() == Node.ELEMENT_NODE) {
                                                                                     if ("amount".equals(applicationGuarantee.item(li).getNodeName())) {
                                                                                         amount = applicationGuarantee.item(li).getTextContent();
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        case "contractConditionsInfo" -> {
+                                                                            contract_conditionsInfo = customerRequirementInfo.item(l).getChildNodes();
+                                                                            for (int li = 0; li < contract_conditionsInfo.getLength(); li++) {
+                                                                                if (contract_conditionsInfo.item(li).getNodeType() == Node.ELEMENT_NODE) {
+                                                                                    if ("IKZInfo".equals(contract_conditionsInfo.item(li).getNodeName())) {
+                                                                                        ikz_node = contract_conditionsInfo.item(li).getChildNodes();
+                                                                                        for (int k1 = 0; k1 < ikz_node.getLength(); k1++) {
+                                                                                            if (ikz_node.item(k1).getNodeType() == Node.ELEMENT_NODE) {
+                                                                                                if ("purchaseCode".equals(ikz_node.item(k1).getNodeName())) {
+                                                                                                    ikz = ikz_node.item(k1).getTextContent();
+                                                                                                }
+                                                                                            }
+                                                                                        }
                                                                                     }
                                                                                 }
                                                                             }
@@ -238,7 +290,10 @@ public class HelloController {
                         fz44.setMaxPrice(maxPrice);
                         fz44.setUrl(href);
                         fz44.setDocUrl(docUrlList);
-
+                        fz44.setInn(inn);
+                        fz44.setKpp(kpp);
+                        fz44.setPublishDate(publishDate);
+                        fz44.setIkz(ikz);
 
                     }
                     System.out.println("======>");
@@ -255,7 +310,8 @@ public class HelloController {
         });
 
         save.setOnAction(actionEvent -> {
-            int i=0;
+            int i = 0;
+
             for (Object o : res) {
                 Connection conn = null;
                 try {
@@ -267,6 +323,7 @@ public class HelloController {
                 String sql = "insert into tenders (tenderid, article, tendertype, summcontract) values (?,?,?,?)";
                 PreparedStatement preparedStatement = null;
                 try {
+                    System.out.println(i);
                     preparedStatement = conn.prepareStatement(sql);
                     preparedStatement.setString(1, String.valueOf(itemHolder.getItems().get(i).tenderid));
                     preparedStatement.setString(2, fz44.getArticle());
@@ -275,16 +332,21 @@ public class HelloController {
                     int rows = preparedStatement.executeUpdate();
                     System.out.printf("%d rows added\n", rows);
                     System.out.println(itemHolder.getItems().get(i));
+
+                    File file = new File("\\\\192.168.0.30\\Accept\\Рахимов\\Новый каталог\\" + itemHolder.getItems().get(i).tenderid);
+                    boolean status = file.exists();
+                    try {
+                        if (!status) {
+                            file.mkdir();
+                            //FileUtil.fileupload(path);
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     i++;
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-
-
-
-
-
-
             }
         });
 
