@@ -2,7 +2,6 @@ package com.example.fishing;
 
 import com.example.fishing.models.DocUrl;
 import com.example.fishing.models.FZ44;
-import com.example.fishing.utils.FileUtil;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
@@ -83,6 +82,10 @@ public class HelloController {
                 String inn = "";
                 String kpp = "";
                 String ikz = "";
+                String contactPersonName = "";
+                String contactPersonFirstName = "";
+                String contactPersonEmail = "";
+                String contactPersonPhone = "";
 
                 System.out.println((long) feed[0].getEntries().size());
                 String url;
@@ -115,10 +118,11 @@ public class HelloController {
                     NodeList attachments;
                     NodeList docKindInfo;
                     NodeList responsibleOrgInfo;
+                    NodeList responsibleInfo;
                     NodeList purchaseResponsibleInfo;
-                    NodeList ikzz;
                     NodeList ikz_node;
                     NodeList contract_conditionsInfo;
+                    NodeList contactPersonInfo;
 
 
                     for (int i = 0; i < rootNode.getLength(); i++) {
@@ -158,13 +162,39 @@ public class HelloController {
                                 purchaseResponsibleInfo = rootNode.item(i).getChildNodes();
                                 for (int j = 0; j < purchaseResponsibleInfo.getLength(); j++) {
                                     if (purchaseResponsibleInfo.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                                        if ("responsibleOrgInfo".equals(purchaseResponsibleInfo.item(j).getNodeName())) {
-                                            responsibleOrgInfo = purchaseResponsibleInfo.item(j).getChildNodes();
-                                            for (int k = 0; k < responsibleOrgInfo.getLength(); k++) {
-                                                if (responsibleOrgInfo.item(k).getNodeType() == Node.ELEMENT_NODE) {
-                                                    switch (responsibleOrgInfo.item(k).getNodeName()) {
-                                                        case "INN" -> inn = responsibleOrgInfo.item(k).getTextContent();
-                                                        case "KPP" -> kpp = responsibleOrgInfo.item(k).getTextContent();
+                                        switch (purchaseResponsibleInfo.item(j).getNodeName()) {
+                                            case "responsibleOrgInfo" -> {
+                                                responsibleOrgInfo = purchaseResponsibleInfo.item(j).getChildNodes();
+                                                for (int k = 0; k < responsibleOrgInfo.getLength(); k++) {
+                                                    if (responsibleOrgInfo.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                                                        switch (responsibleOrgInfo.item(k).getNodeName()) {
+                                                            case "INN" ->
+                                                                    inn = responsibleOrgInfo.item(k).getTextContent();
+                                                            case "KPP" ->
+                                                                    kpp = responsibleOrgInfo.item(k).getTextContent();
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            case "responsibleInfo" -> {
+                                                responsibleInfo = purchaseResponsibleInfo.item(j).getChildNodes();
+                                                for (int k = 0; k < responsibleInfo.getLength(); k++) {
+                                                    if (responsibleInfo.item(k).getNodeType() == Node.ELEMENT_NODE) {
+                                                        switch (responsibleInfo.item(k).getNodeName()) {
+                                                            case "contactPersonInfo" -> {
+                                                                contactPersonInfo = responsibleInfo.item(k).getChildNodes();
+                                                                for (int l = 0; l < contactPersonInfo.getLength(); l++) {
+                                                                    if (contactPersonInfo.item(l).getNodeType() == Node.ELEMENT_NODE) {
+                                                                        switch (contactPersonInfo.item(l).getNodeName()) {
+                                                                            case "ns3:lastName" -> contactPersonName = contactPersonInfo.item(l).getTextContent();
+                                                                            case "ns3:firstName" -> contactPersonFirstName = contactPersonInfo.item(l).getTextContent();
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            case "contactEMail" -> contactPersonEmail = responsibleInfo.item(k).getTextContent();
+                                                            case "contactPhone" -> contactPersonPhone = responsibleInfo.item(k).getTextContent();
+                                                        }
                                                     }
                                                 }
                                             }
@@ -294,6 +324,10 @@ public class HelloController {
                         fz44.setKpp(kpp);
                         fz44.setPublishDate(publishDate);
                         fz44.setIkz(ikz);
+                        fz44.setPerson_name(contactPersonName);
+                        fz44.setPerson_first_name(contactPersonFirstName);
+                        fz44.setPhone(contactPersonPhone);
+                        fz44.setEmail(contactPersonEmail);
 
                     }
                     System.out.println("======>");

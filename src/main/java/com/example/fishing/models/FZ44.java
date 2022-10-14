@@ -10,19 +10,18 @@ public class FZ44 {
     public String article; // +
     public ArrayList<DocUrl> docUrl; // +
     public String maxPrice; // +
-    public String inn;
-    public String kpp;
+    public String inn; //+-
+    public String kpp; //+-
     public String amount; // +
     public String publishDate;//+-
     public String url; // +
 
     //добавить в парсер
-    public String ikz;
-    public String dateOfCreation;
+    public String ikz; //+-
     public String phone;
     public String email;
-    public String address;
-    public String person;
+    public String person_name;
+    public String person_first_name;
 
     public FZ44(String tenderid, String tendertype, String clientname, String article, String maxPrice, ArrayList<DocUrl> docUrl) {
         this.tenderid = tenderid;
@@ -36,6 +35,15 @@ public class FZ44 {
     public FZ44() {
 
     }
+
+    public String getPerson_first_name() {
+        return person_first_name;
+    }
+
+    public void setPerson_first_name(String person_first_name) {
+        this.person_first_name = person_first_name;
+    }
+
     public String getUrl() {
         return url;
     }
@@ -87,10 +95,6 @@ public class FZ44 {
         return this.ikz;
     }
 
-    public String getDateOfCreation() {
-        return this.dateOfCreation;
-    }
-
     public String getPhone() {
         return this.phone;
     }
@@ -99,12 +103,9 @@ public class FZ44 {
         return this.email;
     }
 
-    public String getAddress() {
-        return this.address;
-    }
 
-    public String getPerson() {
-        return this.person;
+    public String getPerson_name() {
+        return this.person_name;
     }
 
     public void setTenderid(String num) {
@@ -151,9 +152,6 @@ public class FZ44 {
         this.ikz = ikz;
     }
 
-    public void setDateOfCreation(String dateOfCreation) {
-        this.dateOfCreation = dateOfCreation;
-    }
 
     public void setPhone(String phone) {
         this.phone = phone;
@@ -163,12 +161,8 @@ public class FZ44 {
         this.email = email;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setPerson(String person) {
-        this.person = person;
+    public void setPerson_name(String person_name) {
+        this.person_name = person_name;
     }
 
     @Override
@@ -186,11 +180,10 @@ public class FZ44 {
                 ", publishDate='" + publishDate + '\'' +
                 ", url='" + url + '\'' +
                 ", ikz='" + ikz + '\'' +
-                ", dateOfCreation='" + dateOfCreation + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
-                ", person='" + person + '\'' +
+                ", person_name='" + person_name + '\'' +
+                ", person_first_name='" + person_first_name + '\'' +
                 '}';
     }
 }
