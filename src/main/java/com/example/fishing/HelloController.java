@@ -2,6 +2,7 @@ package com.example.fishing;
 
 import com.example.fishing.models.DocUrl;
 import com.example.fishing.models.FZ44;
+import com.example.fishing.utils.FileUtil;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
@@ -16,9 +17,13 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -57,9 +62,11 @@ public class HelloController {
 
     @FXML
     protected void take() throws Exception {
+        LocalDate date = shedule.getValue();
+        date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
         final SyndFeed[] feed = new SyndFeed[1];
-        feed[0] = getSyndFeedForUrl("https://zakupki.gov.ru/epz/order/extendedsearch/rss.html?morphology=on&sortBy=UPDATE_DATE&pageNumber=1&sortDirection=false&recordsPerPage=_10&showLotsInfoHidden=false&fz44=on&af=on&ca=on&pc=on&pa=on&priceContractAdvantages44IdNameHidden=%7B%7D&priceContractAdvantages94IdNameHidden=%7B%7D&currencyIdGeneral=-1&publishDateFrom=" + getDate() + "&publishDateTo=" + getDate() + "&delKladrIds=5277338&delKladrIdsCodes=11000000000&selectedSubjectsIdNameHidden=%7B%7D&okdpGroupIdsIdNameHidden=%7B%7D&koksIdsIdNameHidden=%7B%7D&OrderPlacementSmallBusinessSubject=on&OrderPlacementRnpData=on&OrderPlacementExecutionRequirement=on&orderPlacement94_0=0&orderPlacement94_1=0&orderPlacement94_2=0&contractPriceCurrencyId=-1&budgetLevelIdNameHidden=%7B%7D&nonBudgetTypesIdNameHidden=%7B%7D");
+        feed[0] = getSyndFeedForUrl("https://zakupki.gov.ru/epz/order/extendedsearch/rss.html?morphology=on&sortBy=UPDATE_DATE&pageNumber=1&sortDirection=false&recordsPerPage=_10&showLotsInfoHidden=false&fz44=on&af=on&ca=on&pc=on&pa=on&priceContractAdvantages44IdNameHidden=%7B%7D&priceContractAdvantages94IdNameHidden=%7B%7D&currencyIdGeneral=-1&publishDateFrom=" + date + "&publishDateTo=" + date + "&delKladrIds=5277338&delKladrIdsCodes=11000000000&selectedSubjectsIdNameHidden=%7B%7D&okdpGroupIdsIdNameHidden=%7B%7D&koksIdsIdNameHidden=%7B%7D&OrderPlacementSmallBusinessSubject=on&OrderPlacementRnpData=on&OrderPlacementExecutionRequirement=on&orderPlacement94_0=0&orderPlacement94_1=0&orderPlacement94_2=0&contractPriceCurrencyId=-1&budgetLevelIdNameHidden=%7B%7D&nonBudgetTypesIdNameHidden=%7B%7D");
         List res = feed[0].getEntries();
         ObservableList<FZ44> fz44ObsList = FXCollections.observableArrayList();
         take.setOnAction(actionEvent -> {
@@ -186,14 +193,18 @@ public class HelloController {
                                                                 for (int l = 0; l < contactPersonInfo.getLength(); l++) {
                                                                     if (contactPersonInfo.item(l).getNodeType() == Node.ELEMENT_NODE) {
                                                                         switch (contactPersonInfo.item(l).getNodeName()) {
-                                                                            case "ns3:lastName" -> contactPersonName = contactPersonInfo.item(l).getTextContent();
-                                                                            case "ns3:firstName" -> contactPersonFirstName = contactPersonInfo.item(l).getTextContent();
+                                                                            case "ns3:lastName" ->
+                                                                                    contactPersonName = contactPersonInfo.item(l).getTextContent();
+                                                                            case "ns3:firstName" ->
+                                                                                    contactPersonFirstName = contactPersonInfo.item(l).getTextContent();
                                                                         }
                                                                     }
                                                                 }
                                                             }
-                                                            case "contactEMail" -> contactPersonEmail = responsibleInfo.item(k).getTextContent();
-                                                            case "contactPhone" -> contactPersonPhone = responsibleInfo.item(k).getTextContent();
+                                                            case "contactEMail" ->
+                                                                    contactPersonEmail = responsibleInfo.item(k).getTextContent();
+                                                            case "contactPhone" ->
+                                                                    contactPersonPhone = responsibleInfo.item(k).getTextContent();
                                                         }
                                                     }
                                                 }
@@ -367,20 +378,42 @@ public class HelloController {
                     System.out.printf("%d rows added\n", rows);
                     System.out.println(itemHolder.getItems().get(i));
 
-                    File file = new File("\\\\192.168.0.30\\Accept\\Рахимов\\Новый каталог\\" + itemHolder.getItems().get(i).tenderid);
-                    boolean status = file.exists();
-                    try {
-                        if (!status) {
-                            file.mkdir();
-                            //FileUtil.fileupload(path);
-                        }
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                    i++;
-                } catch (SQLException e) {
+
+                } catch (SQLException  e) {
                     throw new RuntimeException(e);
                 }
+                File file = new File("\\\\192.168.0.30\\Accept\\Рахимов\\files\\" + itemHolder.getItems().get(i).tenderid);
+
+                boolean status = file.exists();
+                try {
+                    if (!status) {
+                        file.mkdir();
+                        //FileUtil.fileupload(path);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                for (int a = 0; a < itemHolder.getItems().get(i).getDocUrl().size(); a++) {
+                    System.out.println(a);
+                    try {
+                        URL url = new URL(itemHolder.getItems().get(i).getDocUrl().get(a).getUrl()); /*fz44.getDocUrl().get(a).getUrl()*/
+                        URLConnection connection = url.openConnection(); //устанавливаем соединение
+                        connection.setDoOutput(true);
+                        File file_exists = new File(file + "\\" + itemHolder.getItems().get(i).getDocUrl().get(a).getDocName() + ".docx");
+
+                        //получаем InputStream, чтобы читать из него данные ответа
+                        InputStream inputStream = url.openStream();
+                        if (!file_exists.exists()) {
+                            Files.copy(inputStream, new File(file + "\\" + itemHolder.getItems().get(i).getDocUrl().get(a).getDocName() + ".docx").toPath());
+                        }else{
+                            //Files.copy(inputStream, new File(file + "\\" + itemHolder.getItems().get(i).getDocUrl().get(a).getDocName() + "(1).docx").toPath());
+                            break;
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                i++;
             }
         });
 
