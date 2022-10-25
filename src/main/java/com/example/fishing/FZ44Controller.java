@@ -96,11 +96,42 @@ public class FZ44Controller extends ListCell<FZ44> {
                 }
             }
 
+            check.setOnAction(actionEvent -> {
+                //check.setSelected(false);
+                        if (check.isSelected()) {
+                            pane441.setStyle("-fx-background-color:  #f8d8b0");
+                            pane442.setStyle("-fx-background-color:   #f8e8d8");
+                            pane443.setStyle("-fx-background-color:  #f8d8b0");
+                            doc1.setStyle("-fx-background-color: #f8d8b0");
+                            doc2.setStyle("-fx-background-color: #f8d8b0");
+                            doc3.setStyle("-fx-background-color: #f8d8b0");
+                            doc4.setStyle("-fx-background-color: #f8d8b0");
+                            doc5.setStyle("-fx-background-color: #f8d8b0");
+                            doc6.setStyle("-fx-background-color: #f8d8b0");
+                            doc7.setStyle("-fx-background-color: #f8d8b0");
+                            return;
+                        } else if (!check.isSelected()) {
+                            pane441.setStyle("-fx-background-color: #cdcdcd");
+                            pane442.setStyle("-fx-background-color: #ebebeb");
+                            pane443.setStyle("-fx-background-color: #cdcdcd");
+                            doc1.setStyle("-fx-background-color: #cdcdcd");
+                            doc2.setStyle("-fx-background-color: #cdcdcd");
+                            doc3.setStyle("-fx-background-color: #cdcdcd");
+                            doc4.setStyle("-fx-background-color: #cdcdcd");
+                            doc5.setStyle("-fx-background-color: #cdcdcd");
+                            doc6.setStyle("-fx-background-color: #cdcdcd");
+                            doc7.setStyle("-fx-background-color: #cdcdcd");
+                            return;
+                        }
+                    }
+            );
             num.setText(fz.getTenderid());
             price.setText(fz.getMaxPrice());
             type.setText(fz.getTendertype());
             info.setText(fz.getArticle());
             orgName.setText(fz.getClientname());
+            //check.setSelected(fz.getActive());
+            //check.setSelected(fz.setActive(check.get));
             if (fz.getDocUrl().size() == 1) {
                 //Названия документов
                 doc1.setText(fz.getDocUrl().get(0).getDocName());

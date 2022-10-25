@@ -15,6 +15,7 @@ public class FZ44 {
     public String amount; // +
     public String publishDate;//+-
     public String url; // +
+    public Boolean active; // +-
 
     //добавить в парсер
     public String ikz; //+-
@@ -23,7 +24,7 @@ public class FZ44 {
     public String person_name;
     public String person_first_name;
 
-    public FZ44(String tenderid, String tendertype, String clientname, String article, String maxPrice, ArrayList<DocUrl> docUrl) {
+    public FZ44(String tenderid, String tendertype, String clientname, String article, String maxPrice, ArrayList<DocUrl> docUrl, Boolean active) {
         this.tenderid = tenderid;
         this.tendertype = tendertype;
         this.clientname = clientname;
@@ -42,6 +43,15 @@ public class FZ44 {
 
     public void setPerson_first_name(String person_first_name) {
         this.person_first_name = person_first_name;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public boolean setActive(Boolean active) {
+        this.active = active;
+        return false;
     }
 
     public String getUrl() {
@@ -179,6 +189,7 @@ public class FZ44 {
                 ", amount='" + amount + '\'' +
                 ", publishDate='" + publishDate + '\'' +
                 ", url='" + url + '\'' +
+                ", active=" + active +
                 ", ikz='" + ikz + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +

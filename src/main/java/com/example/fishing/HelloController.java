@@ -2,7 +2,6 @@ package com.example.fishing;
 
 import com.example.fishing.models.DocUrl;
 import com.example.fishing.models.FZ44;
-import com.example.fishing.utils.FileUtil;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
@@ -19,8 +18,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -36,7 +33,6 @@ import java.util.zip.GZIPInputStream;
 
 public class HelloController {
     FZ44 fz44 = new FZ44();
-    ArrayList<FZ44> list = new ArrayList<>();
     @FXML
     public CheckBox dateonly;
     @FXML
@@ -339,13 +335,13 @@ public class HelloController {
                         fz44.setPerson_first_name(contactPersonFirstName);
                         fz44.setPhone(contactPersonPhone);
                         fz44.setEmail(contactPersonEmail);
-
+                        fz44.setActive(false);
                     }
                     System.out.println("======>");
                     System.out.println(fz44);
 
                     fz44ObsList.addAll(new FZ44(fz44.getTenderid(), fz44.getTendertype(),
-                            fz44.getClientname(), fz44.getArticle(), fz44.getMaxPrice(), (ArrayList<DocUrl>) fz44.getDocUrl()));
+                            fz44.getClientname(), fz44.getArticle(), fz44.getMaxPrice(), (ArrayList<DocUrl>) fz44.getDocUrl(), fz44.getActive()));
                     itemHolder.setItems(fz44ObsList);
                     itemHolder.setCellFactory(fzListView -> new FZ44Controller());
                 }
@@ -356,68 +352,95 @@ public class HelloController {
 
         save.setOnAction(actionEvent -> {
             int i = 0;
+            Connection conn = null;
+            try {
+                conn = DriverManager.getConnection(db, username, password);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            if (itemHolder.getItems().get(i).getActive()) {
 
-            for (Object o : res) {
-                Connection conn = null;
-                try {
-                    conn = DriverManager.getConnection(db, username, password);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-
-                String sql = "insert into tenders (tenderid, article, tendertype, summcontract) values (?,?,?,?)";
-                PreparedStatement preparedStatement = null;
-                try {
-                    System.out.println(i);
-                    preparedStatement = conn.prepareStatement(sql);
-                    preparedStatement.setString(1, String.valueOf(itemHolder.getItems().get(i).tenderid));
-                    preparedStatement.setString(2, fz44.getArticle());
-                    preparedStatement.setString(3, fz44.getTendertype());
-                    preparedStatement.setFloat(4, Float.parseFloat(fz44.getMaxPrice()));
-                    int rows = preparedStatement.executeUpdate();
-                    System.out.printf("%d rows added\n", rows);
-                    System.out.println(itemHolder.getItems().get(i));
-
-
-                } catch (SQLException  e) {
-                    throw new RuntimeException(e);
-                }
-                File file = new File("\\\\192.168.0.30\\Accept\\Рахимов\\files\\" + itemHolder.getItems().get(i).tenderid);
-
-                boolean status = file.exists();
-                try {
-                    if (!status) {
-                        file.mkdir();
-                        //FileUtil.fileupload(path);
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                for (int a = 0; a < itemHolder.getItems().get(i).getDocUrl().size(); a++) {
-                    System.out.println(a);
+                for (Object o : res) {
+                    String sql = "insert into tenders (tenderid, article, tendertype, summcontract) values (?,?,?,?)";
+                    PreparedStatement preparedStatement = null;
                     try {
-                        URL url = new URL(itemHolder.getItems().get(i).getDocUrl().get(a).getUrl()); /*fz44.getDocUrl().get(a).getUrl()*/
-                        URLConnection connection = url.openConnection(); //устанавливаем соединение
-                        connection.setDoOutput(true);
-                        File file_exists = new File(file + "\\" + itemHolder.getItems().get(i).getDocUrl().get(a).getDocName() + ".docx");
+                        System.out.println(i);
+                        preparedStatement = conn.prepareStatement(sql);
+                        preparedStatement.setString(1, String.valueOf(itemHolder.getItems().get(i).tenderid));
+                        preparedStatement.setString(2, fz44.getArticle());
+                        preparedStatement.setString(3, fz44.getTendertype());
+                        preparedStatement.setFloat(4, Float.parseFloat(fz44.getMaxPrice()));
+                        int rows = preparedStatement.executeUpdate();
+                        System.out.printf("%d rows added\n", rows);
+                        System.out.println(itemHolder.getItems().get(i));
 
-                        //получаем InputStream, чтобы читать из него данные ответа
-                        InputStream inputStream = url.openStream();
-                        if (!file_exists.exists()) {
-                            Files.copy(inputStream, new File(file + "\\" + itemHolder.getItems().get(i).getDocUrl().get(a).getDocName() + ".docx").toPath());
-                        }else{
-                            //Files.copy(inputStream, new File(file + "\\" + itemHolder.getItems().get(i).getDocUrl().get(a).getDocName() + "(1).docx").toPath());
-                            break;
+
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    File file = new File("\\\\192.168.0.30\\Accept\\Рахимов\\files\\" + itemHolder.getItems().get(i).tenderid);
+
+                    boolean status = file.exists();
+                    try {
+                        if (!status) {
+                            file.mkdir();
+                            //FileUtil.fileupload(path);
                         }
-                    } catch (IOException e) {
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    for (int a = 0; a < itemHolder.getItems().get(i).getDocUrl().size(); a++) {
+                        System.out.println(a);
+                        try {
+                            URL url = new URL(itemHolder.getItems().get(i).getDocUrl().get(a).getUrl()); /*fz44.getDocUrl().get(a).getUrl()*/
+                            URLConnection connection = url.openConnection(); //устанавливаем соединение
+                            connection.setDoOutput(true);
+                            File file_exists = new File(file + "\\" + itemHolder.getItems().get(i).getDocUrl().get(a).getDocName() + ".docx");
+
+                            //получаем InputStream, чтобы читать из него данные ответа
+                            connection.setReadTimeout(2000);
+                            InputStream inputStream = url.openStream();
+                            if (!file_exists.exists()) {
+                                Files.copy(inputStream, new File(file + "\\" + itemHolder.getItems().get(i).getDocUrl().get(a).getDocName() + ".docx").toPath());
+                                inputStream.close();
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    i++;
+                }
+            } else if (!itemHolder.getItems().get(i).getActive()) {
+                for (Object o : res) {
+                    try {
+                        conn = DriverManager.getConnection(db, username, password);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    String sql = "insert into tenders (tenderid, article, tendertype, summcontract) values (?,?,?,?)";
+                    PreparedStatement preparedStatement = null;
+                    try {
+                        System.out.println(i);
+                        preparedStatement = conn.prepareStatement(sql);
+                        preparedStatement.setString(1, String.valueOf(itemHolder.getItems().get(i).tenderid));
+                        preparedStatement.setString(2, fz44.getArticle());
+                        preparedStatement.setString(3, fz44.getTendertype());
+                        preparedStatement.setFloat(4, Float.parseFloat(fz44.getMaxPrice()));
+                        int rows = preparedStatement.executeUpdate();
+                        System.out.printf("%d rows added\n", rows);
+                        System.out.println(itemHolder.getItems().get(i));
+
+
+                    } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
                 }
-                i++;
             }
         });
-
     }
+
+
 
 
     public static SyndFeed getSyndFeedForUrl(String url) throws Exception {
