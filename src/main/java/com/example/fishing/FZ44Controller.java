@@ -9,6 +9,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
@@ -17,11 +19,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.*;
+import java.util.Objects;
 
 public class FZ44Controller extends ListCell<FZ44> {
-
     @FXML
-    private CheckBox check;
+    private ImageView check;
 
     @FXML
     private Button doc1;
@@ -51,7 +53,7 @@ public class FZ44Controller extends ListCell<FZ44> {
     private Label info;
 
     @FXML
-    private ComboBox maker;
+    private ComboBox<?> maker;
 
     @FXML
     private Label num;
@@ -77,7 +79,8 @@ public class FZ44Controller extends ListCell<FZ44> {
     @FXML
     private Label type1;
     private FXMLLoader mloader;
-
+    Image untip = new Image(getClass().getResourceAsStream("!tip.png"));
+    Image tip = new Image(getClass().getResourceAsStream("tip.png"));
     @Override
     protected void updateItem(FZ44 fz, boolean empty) {
         super.updateItem(fz, empty);
@@ -98,8 +101,10 @@ public class FZ44Controller extends ListCell<FZ44> {
                     e.printStackTrace();
                 }
             }
+
             check.setOnMouseClicked(mouseEvent -> {
-                if (check.isSelected()) {
+                if (check.getImage() == untip) {
+                    check.setImage(tip);
                     pane441.setStyle("-fx-background-color:  #f8d8b0");
                     pane442.setStyle("-fx-background-color:   #f8e8d8");
                     pane443.setStyle("-fx-background-color:  #f8d8b0");
@@ -111,7 +116,8 @@ public class FZ44Controller extends ListCell<FZ44> {
                     doc6.setStyle("-fx-background-color: #f8d8b0");
                     doc7.setStyle("-fx-background-color: #f8d8b0");
                     return;
-                } else if (!check.isSelected()) {
+                } else if (check.getImage() == tip) {
+                    check.setImage(untip);
                     pane441.setStyle("-fx-background-color: #cdcdcd");
                     pane442.setStyle("-fx-background-color: #ebebeb");
                     pane443.setStyle("-fx-background-color: #cdcdcd");

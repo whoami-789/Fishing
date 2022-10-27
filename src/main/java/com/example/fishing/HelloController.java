@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import static java.lang.Thread.sleep;
+
 public class HelloController {
     FZ44 fz44 = new FZ44();
     @FXML
@@ -346,7 +348,6 @@ public class HelloController {
                             fz44.getClientname(), fz44.getArticle(), fz44.getMaxPrice(), (ArrayList<DocUrl>) fz44.getDocUrl(), fz44.getActive()));
                     itemHolder.setItems(fz44ObsList);
                     itemHolder.setCellFactory(fzListView -> new FZ44Controller());
-                    fz44ObsList.removeListener((ListChangeListener<? super FZ44>) itemHolder.getItems());
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
