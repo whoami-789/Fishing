@@ -2,6 +2,8 @@ package com.example.fishing;
 
 import com.example.fishing.models.Citems;
 import com.example.fishing.models.FZ44;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -14,6 +16,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.sql.*;
 
 public class FZ44Controller extends ListCell<FZ44> {
 
@@ -48,7 +51,7 @@ public class FZ44Controller extends ListCell<FZ44> {
     private Label info;
 
     @FXML
-    private ComboBox<Citems> maker;
+    private ComboBox maker;
 
     @FXML
     private Label num;
@@ -95,36 +98,33 @@ public class FZ44Controller extends ListCell<FZ44> {
                     e.printStackTrace();
                 }
             }
-
-            check.setOnAction(actionEvent -> {
-                //check.setSelected(false);
-                        if (check.isSelected()) {
-                            pane441.setStyle("-fx-background-color:  #f8d8b0");
-                            pane442.setStyle("-fx-background-color:   #f8e8d8");
-                            pane443.setStyle("-fx-background-color:  #f8d8b0");
-                            doc1.setStyle("-fx-background-color: #f8d8b0");
-                            doc2.setStyle("-fx-background-color: #f8d8b0");
-                            doc3.setStyle("-fx-background-color: #f8d8b0");
-                            doc4.setStyle("-fx-background-color: #f8d8b0");
-                            doc5.setStyle("-fx-background-color: #f8d8b0");
-                            doc6.setStyle("-fx-background-color: #f8d8b0");
-                            doc7.setStyle("-fx-background-color: #f8d8b0");
-                            return;
-                        } else if (!check.isSelected()) {
-                            pane441.setStyle("-fx-background-color: #cdcdcd");
-                            pane442.setStyle("-fx-background-color: #ebebeb");
-                            pane443.setStyle("-fx-background-color: #cdcdcd");
-                            doc1.setStyle("-fx-background-color: #cdcdcd");
-                            doc2.setStyle("-fx-background-color: #cdcdcd");
-                            doc3.setStyle("-fx-background-color: #cdcdcd");
-                            doc4.setStyle("-fx-background-color: #cdcdcd");
-                            doc5.setStyle("-fx-background-color: #cdcdcd");
-                            doc6.setStyle("-fx-background-color: #cdcdcd");
-                            doc7.setStyle("-fx-background-color: #cdcdcd");
-                            return;
-                        }
-                    }
-            );
+            check.setOnMouseClicked(mouseEvent -> {
+                if (check.isSelected()) {
+                    pane441.setStyle("-fx-background-color:  #f8d8b0");
+                    pane442.setStyle("-fx-background-color:   #f8e8d8");
+                    pane443.setStyle("-fx-background-color:  #f8d8b0");
+                    doc1.setStyle("-fx-background-color: #f8d8b0");
+                    doc2.setStyle("-fx-background-color: #f8d8b0");
+                    doc3.setStyle("-fx-background-color: #f8d8b0");
+                    doc4.setStyle("-fx-background-color: #f8d8b0");
+                    doc5.setStyle("-fx-background-color: #f8d8b0");
+                    doc6.setStyle("-fx-background-color: #f8d8b0");
+                    doc7.setStyle("-fx-background-color: #f8d8b0");
+                    return;
+                } else if (!check.isSelected()) {
+                    pane441.setStyle("-fx-background-color: #cdcdcd");
+                    pane442.setStyle("-fx-background-color: #ebebeb");
+                    pane443.setStyle("-fx-background-color: #cdcdcd");
+                    doc1.setStyle("-fx-background-color: #cdcdcd");
+                    doc2.setStyle("-fx-background-color: #cdcdcd");
+                    doc3.setStyle("-fx-background-color: #cdcdcd");
+                    doc4.setStyle("-fx-background-color: #cdcdcd");
+                    doc5.setStyle("-fx-background-color: #cdcdcd");
+                    doc6.setStyle("-fx-background-color: #cdcdcd");
+                    doc7.setStyle("-fx-background-color: #cdcdcd");
+                    return;
+                }
+            });
             num.setText(fz.getTenderid());
             price.setText(fz.getMaxPrice());
             type.setText(fz.getTendertype());
@@ -224,9 +224,26 @@ public class FZ44Controller extends ListCell<FZ44> {
                     throw new RuntimeException(e);
                 }
             });
+            String db = "jdbc:postgresql://192.168.0.30:5432/TASKS";
+            String username = "root";
+            String password = "cerf,kzlm765";
+            Connection conn;
+            Statement stmt = null;
+
+//            try {
+//                conn = DriverManager.getConnection(db, username, password);
+//                stmt = conn.createStatement();
+//                ResultSet rs = stmt.executeQuery("select uname from public.getmanagers()");
+//                //ObservableList<String> langs = FXCollections.observableArrayList(rs.getString(1));
+//                //maker = new ComboBox<>(langs);
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
+
 
             setText(null);
             setGraphic(grid);
         }
+
     }
 }

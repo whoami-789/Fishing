@@ -5,7 +5,9 @@ import com.example.fishing.models.FZ44;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
+import javafx.beans.InvalidationListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -62,7 +64,7 @@ public class HelloController {
         date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
         final SyndFeed[] feed = new SyndFeed[1];
-        feed[0] = getSyndFeedForUrl("https://zakupki.gov.ru/epz/order/extendedsearch/rss.html?morphology=on&sortBy=UPDATE_DATE&pageNumber=1&sortDirection=false&recordsPerPage=_10&showLotsInfoHidden=false&fz44=on&af=on&ca=on&pc=on&pa=on&priceContractAdvantages44IdNameHidden=%7B%7D&priceContractAdvantages94IdNameHidden=%7B%7D&currencyIdGeneral=-1&publishDateFrom=" + date + "&publishDateTo=" + date + "&delKladrIds=5277338&delKladrIdsCodes=11000000000&selectedSubjectsIdNameHidden=%7B%7D&okdpGroupIdsIdNameHidden=%7B%7D&koksIdsIdNameHidden=%7B%7D&OrderPlacementSmallBusinessSubject=on&OrderPlacementRnpData=on&OrderPlacementExecutionRequirement=on&orderPlacement94_0=0&orderPlacement94_1=0&orderPlacement94_2=0&contractPriceCurrencyId=-1&budgetLevelIdNameHidden=%7B%7D&nonBudgetTypesIdNameHidden=%7B%7D");
+        feed[0] = getSyndFeedForUrl("https://zakupki.gov.ru/epz/order/extendedsearch/rss.html?morphology=on&sortBy=UPDATE_DATE&pageNumber=1&sortDirection=false&recordsPerPage=_10&showLotsInfoHidden=false&fz44=on&af=on&ca=on&pc=on&pa=on&priceContractAdvantages44IdNameHidden=%7B%7D&priceContractAdvantages94IdNameHidden=%7B%7D&currencyIdGeneral=-1&publishDateFrom=" + getDate() + "&publishDateTo=" + getDate() + "&delKladrIds=5277338&delKladrIdsCodes=11000000000&selectedSubjectsIdNameHidden=%7B%7D&okdpGroupIdsIdNameHidden=%7B%7D&koksIdsIdNameHidden=%7B%7D&OrderPlacementSmallBusinessSubject=on&OrderPlacementRnpData=on&OrderPlacementExecutionRequirement=on&orderPlacement94_0=0&orderPlacement94_1=0&orderPlacement94_2=0&contractPriceCurrencyId=-1&budgetLevelIdNameHidden=%7B%7D&nonBudgetTypesIdNameHidden=%7B%7D");
         List res = feed[0].getEntries();
         ObservableList<FZ44> fz44ObsList = FXCollections.observableArrayList();
         take.setOnAction(actionEvent -> {
@@ -344,6 +346,7 @@ public class HelloController {
                             fz44.getClientname(), fz44.getArticle(), fz44.getMaxPrice(), (ArrayList<DocUrl>) fz44.getDocUrl(), fz44.getActive()));
                     itemHolder.setItems(fz44ObsList);
                     itemHolder.setCellFactory(fzListView -> new FZ44Controller());
+                    fz44ObsList.removeListener((ListChangeListener<? super FZ44>) itemHolder.getItems());
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
