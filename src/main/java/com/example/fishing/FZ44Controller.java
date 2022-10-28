@@ -1,14 +1,11 @@
 package com.example.fishing;
 
-import com.example.fishing.models.Citems;
 import com.example.fishing.models.FZ44;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -18,12 +15,15 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.Objects;
 
 public class FZ44Controller extends ListCell<FZ44> {
+
+
     @FXML
-    private ImageView check;
+    private CheckBox check;
 
     @FXML
     private Button doc1;
@@ -78,9 +78,14 @@ public class FZ44Controller extends ListCell<FZ44> {
 
     @FXML
     private Label type1;
+
+    @FXML
+    private ListCell<FZ44> fz44ListCell;
+
     private FXMLLoader mloader;
-    Image untip = new Image(getClass().getResourceAsStream("!tip.png"));
-    Image tip = new Image(getClass().getResourceAsStream("tip.png"));
+    Image untip = new Image(Objects.requireNonNull(getClass().getResourceAsStream("!tip.png")));
+    Image tip = new Image(Objects.requireNonNull(getClass().getResourceAsStream("tip.png")));
+
     @Override
     protected void updateItem(FZ44 fz, boolean empty) {
         super.updateItem(fz, empty);
@@ -101,12 +106,10 @@ public class FZ44Controller extends ListCell<FZ44> {
                     e.printStackTrace();
                 }
             }
-
-            check.setOnMouseClicked(mouseEvent -> {
-                if (check.getImage() == untip) {
-                    check.setImage(tip);
+            check.setOnAction(ac -> {
+                if (check.isSelected()) {
                     pane441.setStyle("-fx-background-color:  #f8d8b0");
-                    pane442.setStyle("-fx-background-color:   #f8e8d8");
+                    pane442.setStyle("-fx-background-color:  #f8e8d8");
                     pane443.setStyle("-fx-background-color:  #f8d8b0");
                     doc1.setStyle("-fx-background-color: #f8d8b0");
                     doc2.setStyle("-fx-background-color: #f8d8b0");
@@ -116,8 +119,7 @@ public class FZ44Controller extends ListCell<FZ44> {
                     doc6.setStyle("-fx-background-color: #f8d8b0");
                     doc7.setStyle("-fx-background-color: #f8d8b0");
                     return;
-                } else if (check.getImage() == tip) {
-                    check.setImage(untip);
+                } else if (!check.isSelected()) {
                     pane441.setStyle("-fx-background-color: #cdcdcd");
                     pane442.setStyle("-fx-background-color: #ebebeb");
                     pane443.setStyle("-fx-background-color: #cdcdcd");
@@ -131,105 +133,105 @@ public class FZ44Controller extends ListCell<FZ44> {
                     return;
                 }
             });
-            num.setText(fz.getTenderid());
-            price.setText(fz.getMaxPrice());
-            type.setText(fz.getTendertype());
-            info.setText(fz.getArticle());
-            orgName.setText(fz.getClientname());
-            //check.setSelected(fz.getActive());
-            //check.setSelected(fz.setActive(check.get));
-            if (fz.getDocUrl().size() == 1) {
-                //Названия документов
-                doc1.setText(fz.getDocUrl().get(0).getDocName());
-            } else if (fz.getDocUrl().size() == 2) {
-                //Названия документов
-                doc1.setText(fz.getDocUrl().get(0).getDocName());
-                doc2.setText(fz.getDocUrl().get(1).getDocName());
-            } else if (fz.getDocUrl().size() == 3) {
-                //Названия документов
-                doc1.setText(fz.getDocUrl().get(0).getDocName());
-                doc2.setText(fz.getDocUrl().get(1).getDocName());
-                doc3.setText(fz.getDocUrl().get(2).getDocName());
-            } else if (fz.getDocUrl().size() == 4) {
-                //Названия документов
-                doc1.setText(fz.getDocUrl().get(0).getDocName());
-                doc2.setText(fz.getDocUrl().get(1).getDocName());
-                doc3.setText(fz.getDocUrl().get(2).getDocName());
-                doc4.setText(fz.getDocUrl().get(3).getDocName());
-            } else if (fz.getDocUrl().size() == 5) {
-                //Названия документов
-                doc1.setText(fz.getDocUrl().get(0).getDocName());
-                doc2.setText(fz.getDocUrl().get(1).getDocName());
-                doc3.setText(fz.getDocUrl().get(2).getDocName());
-                doc4.setText(fz.getDocUrl().get(3).getDocName());
-                doc5.setText(fz.getDocUrl().get(4).getDocName());
-            } else if (fz.getDocUrl().size() == 6) {
-                //Названия документов
-                doc1.setText(fz.getDocUrl().get(0).getDocName());
-                doc2.setText(fz.getDocUrl().get(1).getDocName());
-                doc3.setText(fz.getDocUrl().get(2).getDocName());
-                doc4.setText(fz.getDocUrl().get(3).getDocName());
-                doc5.setText(fz.getDocUrl().get(4).getDocName());
-                doc6.setText(fz.getDocUrl().get(5).getDocName());
-            } else if (fz.getDocUrl().size() == 7) {
-                //Названия документов
-                doc1.setText(fz.getDocUrl().get(0).getDocName());
-                doc2.setText(fz.getDocUrl().get(1).getDocName());
-                doc3.setText(fz.getDocUrl().get(2).getDocName());
-                doc4.setText(fz.getDocUrl().get(3).getDocName());
-                doc5.setText(fz.getDocUrl().get(4).getDocName());
-                doc6.setText(fz.getDocUrl().get(5).getDocName());
-                doc7.setText(fz.getDocUrl().get(6).getDocName());
-            }
-            doc1.setOnAction(actionEvent -> {
-                try {
-                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(0).getUrl()).toURI());
-                } catch (IOException | URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            doc2.setOnAction(actionEvent -> {
-                try {
-                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(1).getUrl()).toURI());
-                } catch (IOException | URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            doc3.setOnAction(actionEvent -> {
-                try {
-                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(2).getUrl()).toURI());
-                } catch (IOException | URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            doc4.setOnAction(actionEvent -> {
-                try {
-                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(3).getUrl()).toURI());
-                } catch (IOException | URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            doc5.setOnAction(actionEvent -> {
-                try {
-                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(4).getUrl()).toURI());
-                } catch (IOException | URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            doc6.setOnAction(actionEvent -> {
-                try {
-                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(5).getUrl()).toURI());
-                } catch (IOException | URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            doc7.setOnAction(actionEvent -> {
-                try {
-                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(6).getUrl()).toURI());
-                } catch (IOException | URISyntaxException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+//            num.setText(fz.getTenderid());
+//            price.setText(fz.getMaxPrice());
+//            type.setText(fz.getTendertype());
+//            info.setText(fz.getArticle());
+//            orgName.setText(fz.getClientname());
+//            //check.setSelected(fz.getActive());
+//            //check.setSelected(fz.setActive(check.get));
+//            if (fz.getDocUrl().size() == 1) {
+//                //Названия документов
+//                doc1.setText(fz.getDocUrl().get(0).getDocName());
+//            } else if (fz.getDocUrl().size() == 2) {
+//                //Названия документов
+//                doc1.setText(fz.getDocUrl().get(0).getDocName());
+//                doc2.setText(fz.getDocUrl().get(1).getDocName());
+//            } else if (fz.getDocUrl().size() == 3) {
+//                //Названия документов
+//                doc1.setText(fz.getDocUrl().get(0).getDocName());
+//                doc2.setText(fz.getDocUrl().get(1).getDocName());
+//                doc3.setText(fz.getDocUrl().get(2).getDocName());
+//            } else if (fz.getDocUrl().size() == 4) {
+//                //Названия документов
+//                doc1.setText(fz.getDocUrl().get(0).getDocName());
+//                doc2.setText(fz.getDocUrl().get(1).getDocName());
+//                doc3.setText(fz.getDocUrl().get(2).getDocName());
+//                doc4.setText(fz.getDocUrl().get(3).getDocName());
+//            } else if (fz.getDocUrl().size() == 5) {
+//                //Названия документов
+//                doc1.setText(fz.getDocUrl().get(0).getDocName());
+//                doc2.setText(fz.getDocUrl().get(1).getDocName());
+//                doc3.setText(fz.getDocUrl().get(2).getDocName());
+//                doc4.setText(fz.getDocUrl().get(3).getDocName());
+//                doc5.setText(fz.getDocUrl().get(4).getDocName());
+//            } else if (fz.getDocUrl().size() == 6) {
+//                //Названия документов
+//                doc1.setText(fz.getDocUrl().get(0).getDocName());
+//                doc2.setText(fz.getDocUrl().get(1).getDocName());
+//                doc3.setText(fz.getDocUrl().get(2).getDocName());
+//                doc4.setText(fz.getDocUrl().get(3).getDocName());
+//                doc5.setText(fz.getDocUrl().get(4).getDocName());
+//                doc6.setText(fz.getDocUrl().get(5).getDocName());
+//            } else if (fz.getDocUrl().size() == 7) {
+//                //Названия документов
+//                doc1.setText(fz.getDocUrl().get(0).getDocName());
+//                doc2.setText(fz.getDocUrl().get(1).getDocName());
+//                doc3.setText(fz.getDocUrl().get(2).getDocName());
+//                doc4.setText(fz.getDocUrl().get(3).getDocName());
+//                doc5.setText(fz.getDocUrl().get(4).getDocName());
+//                doc6.setText(fz.getDocUrl().get(5).getDocName());
+//                doc7.setText(fz.getDocUrl().get(6).getDocName());
+//            }
+//            doc1.setOnAction(actionEvent -> {
+//                try {
+//                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(0).getUrl()).toURI());
+//                } catch (IOException | URISyntaxException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            doc2.setOnAction(actionEvent -> {
+//                try {
+//                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(1).getUrl()).toURI());
+//                } catch (IOException | URISyntaxException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            doc3.setOnAction(actionEvent -> {
+//                try {
+//                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(2).getUrl()).toURI());
+//                } catch (IOException | URISyntaxException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            doc4.setOnAction(actionEvent -> {
+//                try {
+//                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(3).getUrl()).toURI());
+//                } catch (IOException | URISyntaxException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            doc5.setOnAction(actionEvent -> {
+//                try {
+//                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(4).getUrl()).toURI());
+//                } catch (IOException | URISyntaxException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            doc6.setOnAction(actionEvent -> {
+//                try {
+//                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(5).getUrl()).toURI());
+//                } catch (IOException | URISyntaxException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            doc7.setOnAction(actionEvent -> {
+//                try {
+//                    Desktop.getDesktop().browse(new URL(fz.getDocUrl().get(6).getUrl()).toURI());
+//                } catch (IOException | URISyntaxException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
             String db = "jdbc:postgresql://192.168.0.30:5432/TASKS";
             String username = "root";
             String password = "cerf,kzlm765";
@@ -250,6 +252,5 @@ public class FZ44Controller extends ListCell<FZ44> {
             setText(null);
             setGraphic(grid);
         }
-
     }
 }
